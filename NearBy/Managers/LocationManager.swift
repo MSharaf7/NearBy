@@ -2,9 +2,39 @@
 //  LocationManager.swift
 //  NearBy
 //
-//  Created by Marwan Sharaf on 9/11/22.
+//  Created by Marwan Sharaf and Charles Snider on 9/11/22.
 //
 
-// TODO: Implement LocationManager to request location info from user
-
 import Foundation
+import CoreLocation
+
+class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+    
+    let manager = CLLocationManager()
+    
+    
+    @Published var location: CLLocationCoordinate2D?
+    @Published var isLoading = false
+    
+    
+    override init() {
+        super.init()
+        manager.delegate = self
+    }
+    
+    func requestLocation() {
+        isLoading = true
+        manager.requestLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        location = locations.first?.coordinate
+        isLoading = false
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error getting location", error)
+        isLoading = false
+    }
+    
+}
