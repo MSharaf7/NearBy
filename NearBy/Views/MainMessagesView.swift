@@ -83,7 +83,13 @@ struct MainMessagesView: View {
                         //    newMessageButton, alignment: .bottom)
                         //.navigationBarHidden(true)
                 }.onTapGesture {
-                    num = num + 1
+                    if num == (pics.count - 1) {
+                        num = 0
+                        
+                    } else {
+                        num = num + 1
+
+                    }
                }
         }
     }
