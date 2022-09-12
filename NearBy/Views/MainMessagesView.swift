@@ -58,28 +58,33 @@ struct MainMessagesView: View {
     
     @State var shouldShowLogOutOptions = false
     
+    @State var num = 0
+    
     @ObservedObject private var vm = MainMessagesViewModel()
     
     var body: some View {
         NavigationView {
-            
-            VStack {
-//                Text("User: \(vm.chatUser?.uid ?? "")")
-                
-                customNavBar
-                timeLoc
-                    .padding()
-                Image("meme-final")
-                    .resizable()
-                    .frame(width: 375, height: 400)
-                    .clipped()
-                Spacer()
-                    
-                //messagesView
-            }
-            //.overlay(
-            //    newMessageButton, alignment: .bottom)
-            //.navigationBarHidden(true)
+                ScrollView {
+                        VStack {
+            //                Text("User: \(vm.chatUser?.uid ?? "")")
+                            
+                            customNavBar
+                            timeLoc
+                                .padding()
+                            WebImage(url: URL(string: pics[num] ))
+                                .resizable()
+                                .frame(width: 375, height: 400)
+                                .clipped()
+                            Spacer()
+                                
+                            //messagesView
+                        }
+                        //.overlay(
+                        //    newMessageButton, alignment: .bottom)
+                        //.navigationBarHidden(true)
+                }.onTapGesture {
+                    num = num + 1
+               }
         }
     }
     
@@ -142,7 +147,7 @@ struct MainMessagesView: View {
     }
     
     private var timeLoc:  some View {
-                Text("Today, \(Date().formatted(.dateTime.month().day().hour().minute()))")
+                Text(" \(Date().formatted(.dateTime.month().day().hour().minute()))")
                     .fontWeight(.light)
 
     }

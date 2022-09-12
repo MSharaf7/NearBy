@@ -18,6 +18,7 @@
 		5949442E28CDCEEB00818800 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5949442D28CDCEEB00818800 /* Preview Assets.xcassets */; };
 		5949443B28CDD44E00818800 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5949443A28CDD44E00818800 /* LocationManager.swift */; };
 		5949443F28CE832D00818800 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5949443E28CE832D00818800 /* WelcomeView.swift */; };
+		5988772528CF02BB00A17B7D /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5988772428CF02BB00A17B7D /* Data.swift */; };
 		59B85E7028CEBEF700806675 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85E6F28CEBEF700806675 /* FirebaseManager.swift */; };
 		59B85E7328CEC4E900806675 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 59B85E7228CEC4E900806675 /* SDWebImageSwiftUI */; };
 		59B85E7728CED3AE00806675 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85E7628CED3AE00806675 /* UserInfo.swift */; };
@@ -34,6 +35,7 @@
 		5949442D28CDCEEB00818800 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5949443A28CDD44E00818800 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		5949443E28CE832D00818800 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		5988772428CF02BB00A17B7D /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		59B85E6F28CEBEF700806675 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		59B85E7628CED3AE00806675 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		59B85E7828CED75A00806675 /* MainMessagesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMessagesView.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			children = (
 				59B85E6F28CEBEF700806675 /* FirebaseManager.swift */,
 				59B85E7628CED3AE00806675 /* UserInfo.swift */,
+				5988772428CF02BB00A17B7D /* Data.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -210,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5949442928CDCEEA00818800 /* LoginView.swift in Sources */,
+				5988772528CF02BB00A17B7D /* Data.swift in Sources */,
 				59B85E7028CEBEF700806675 /* FirebaseManager.swift in Sources */,
 				5949442728CDCEEA00818800 /* NearByApp.swift in Sources */,
 				5939B68628CEA99B00F333E3 /* ImagePicker.swift in Sources */,
