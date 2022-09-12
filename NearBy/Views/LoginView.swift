@@ -11,26 +11,9 @@ import FirebaseStorage
 import FirebaseFirestore
 
 
-class FirebaseManager: NSObject {
-    
-    let auth: Auth
-    let storage: Storage
-    let firestore: Firestore
-    
-    static let shared = FirebaseManager()
-    
-    override init() {
-        FirebaseApp.configure()
-        
-        self.auth = Auth.auth()
-        self.storage = Storage.storage()
-        self.firestore = Firestore.firestore()
-        
-        super.init()
-    }
-}
-
 struct LoginView: View {
+    
+    let didCompleteLoginProcess: () -> ()
     
     @State var LoginMode = true
     @State var email = ""
@@ -104,7 +87,7 @@ struct LoginView: View {
                         .shadow(color: Color.black.opacity(0.25), radius: 5, x: 0.0, y: 0.0)
                     }
                     
-                    Text(self.loginStatusMsg).foregroundColor(.red)
+                    Text(self.loginStatusMessage).foregroundColor(.red)
                 }
                 .padding()
                 
@@ -122,92 +105,101 @@ struct LoginView: View {
     
     private func handleAction() {
         if LoginMode {
+//            print("Should log into Firebase with existing credentials")
             loginUser()
-            //print("Should log into firebase with existing cred")
         } else {
             createNewAccount()
-            //print("Register a new account inside of firebase auth and then sotre image in storage")
+//            print("Register a new account inside of Firebase Auth and then store image in Storage somehow....")
         }
     }
     
-    @State var loginStatusMsg = ""
-    
     private func loginUser() {
-        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) {
-            result, err in
+        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, err in
             if let err = err {
                 print("Failed to login user:", err)
-                self.loginStatusMsg = "Failed to login user: \(err)"
+                self.loginStatusMessage = "Failed to login user: \(err)"
                 return
             }
             
             print("Successfully logged in as user: \(result?.user.uid ?? "")")
             
-            self.loginStatusMsg = "Successfully logged in as user: \(result?.user.uid ?? "")"
+            self.loginStatusMessage = "Successfully logged in as user: \(result?.user.uid ?? "")"
+            
+            self.didCompleteLoginProcess()
         }
     }
-        
+    
+    @State var loginStatusMessage = ""
+    
     private func createNewAccount() {
-        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {
-            result, err in
+        if self.image == nil {
+            self.loginStatusMessage = "You must select an avatar image"
+            return
+        }
+        
+        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) { result, err in
             if let err = err {
                 print("Failed to create user:", err)
-                self.loginStatusMsg = "Failed to create user: \(err)"
+                self.loginStatusMessage = "Failed to create user: \(err)"
                 return
             }
             
             print("Successfully created user: \(result?.user.uid ?? "")")
-            self.loginStatusMsg = "Successfully created user: \(result?.user.uid ?? "")"
             
-            self.userImageToStorage()
+            self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
+            
+            self.persistImageToStorage()
         }
     }
     
-    private func userImageToStorage() {
-            guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
-            let ref = FirebaseManager.shared.storage.reference(withPath: uid)
-            guard let imageData = self.image?.jpegData(compressionQuality: 0.5) else { return }
-            ref.putData(imageData, metadata: nil) { metadata, err in
+    private func persistImageToStorage() {
+//        let filename = UUID().uuidString
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let ref = FirebaseManager.shared.storage.reference(withPath: uid)
+        guard let imageData = self.image?.jpegData(compressionQuality: 0.5) else { return }
+        ref.putData(imageData, metadata: nil) { metadata, err in
+            if let err = err {
+                self.loginStatusMessage = "Failed to push image to Storage: \(err)"
+                return
+            }
+            
+            ref.downloadURL { url, err in
                 if let err = err {
-                    self.loginStatusMsg = "Failed to push image to Storage: \(err)"
+                    self.loginStatusMessage = "Failed to retrieve downloadURL: \(err)"
                     return
                 }
-
-                ref.downloadURL { url, err in
-                    if let err = err {
-                        self.loginStatusMsg = "Failed to retrieve downloadURL: \(err)"
-                        return
-                    }
-
-                    self.loginStatusMsg = "Successfully stored image with url: \(url?.absoluteString ?? "")"
-                    
-                    print("Successfully stored image with url: \(url?.absoluteString ?? "")")
-                    
-                    guard let url = url else { return }
-                    self.storeUserInfo(imapeProfileUrl: url)
-                }
+                
+                self.loginStatusMessage = "Successfully stored image with url: \(url?.absoluteString ?? "")"
+                print(url?.absoluteString)
+                
+                guard let url = url else { return }
+                self.storeUserInformation(imageProfileUrl: url)
             }
         }
-    
-        private func storeUserInfo(imapeProfileUrl: URL) {
-            guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
-                let userData = ["email": self.email, "uid": uid, "profileImageUrl": imapeProfileUrl.absoluteString]
-                FirebaseManager.shared.firestore.collection("users")
-                    .document(uid).setData(userData) { err in
-                        if let err = err {
-                            print(err)
-                            self.loginStatusMsg = "\(err)"
-                            return
-                        }
-
-                        print("Success")
-                    }
-            }
-    
     }
+    
+    private func storeUserInformation(imageProfileUrl: URL) {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let userData = ["email": self.email, "uid": uid, "profileImageUrl": imageProfileUrl.absoluteString]
+        FirebaseManager.shared.firestore.collection("users")
+            .document(uid).setData(userData) { err in
+                if let err = err {
+                    print(err)
+                    self.loginStatusMessage = "\(err)"
+                    return
+                }
+                
+                print("Success")
+                
+                self.didCompleteLoginProcess()
+            }
+    }
+}
 
-struct ContentView_Previews: PreviewProvider {
+struct ContentView_Previews1: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(didCompleteLoginProcess: {
+            
+        })
     }
 }
