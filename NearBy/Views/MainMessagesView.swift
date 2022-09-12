@@ -73,6 +73,7 @@ struct MainMessagesView: View {
                     .resizable()
                     .frame(width: 375, height: 400)
                     .clipped()
+                Spacer()
                     
                 //messagesView
             }
@@ -124,7 +125,7 @@ struct MainMessagesView: View {
         }
         .padding()
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
-            .init(title: Text("Settings"), message: Text("What do you want to do?"), buttons: [
+            .init(title: Text("Settings"), buttons: [
                 .destructive(Text("Sign Out"), action: {
                     print("handle sign out")
                     vm.handleSignOut()
@@ -146,6 +147,7 @@ struct MainMessagesView: View {
 
     }
     
+    /*
     private var messagesView: some View {
         ScrollView {
             ForEach(0..<10, id: \.self) { num in
@@ -178,7 +180,9 @@ struct MainMessagesView: View {
             }.padding(.bottom, 50)
         }
     }
+    */
     
+    /*
     private var newMessageButton: some View {
         Button {
             
@@ -197,12 +201,13 @@ struct MainMessagesView: View {
                 .shadow(radius: 15)
         }
     }
+    */
 }
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
         MainMessagesView()
-            .preferredColorScheme(.dark)
+            .preferredColorScheme(.light)
         
         MainMessagesView()
     }

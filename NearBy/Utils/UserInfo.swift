@@ -8,6 +8,7 @@
 import Foundation
 
 struct UserInfo {
+    
     let uid, email, profileImageUrl: String
     
     init(data: [String:Any]) {
